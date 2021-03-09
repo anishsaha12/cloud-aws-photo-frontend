@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Photo Album</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/templatemo-style.css">
+    <link rel="stylesheet" href="css/jsuites.css" type="text/css" />
+<!--
+    
+TemplateMo 556 Catalog-Z
+
+https://templatemo.com/tm-556-catalog-z
+
+-->
+</head>
+<body>
+    <!-- Page Loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-film mr-2"></i>
+                Cloud Photo Album
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-1" href="index.html">Photos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-link-4 active" aria-current="page" href="contact.html">Upload</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid tm-mt-60">
+        <div class="row tm-mb-50">
+            <div class="col-lg-6 col-12 mb-5">
+                <h2 class="tm-text-primary mb-5">Upload the Image</h2>
+                <form id="upload-form" action="" method="PUT" class="tm-contact-form mx-auto" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="image-file" class="form-label">Select Image</label><br>
+                        <input type="file" class="form-control" name="image" id="image-file"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="custom-labels" class="form-label">Custom Labels</label>
+                        <jsuites-tags name="custom-labels" value="" id="custom-labels"></jsuites-tags>
+                    </div>
+
+                    <div class="form-group tm-text-right">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-lg-6 col-12 mb-5">
+                <div class="tm-address-col">
+                    <h2 class="tm-text-primary mb-5">&nbsp;</h2>
+                    <div class="form-group">
+                        <div class="image-area mt-4">
+                            <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div> <!-- container-fluid, tm-container-content -->
+
+    <footer class="tm-bg-gray pt-5 pb-3 tm-text-gray tm-footer">
+        <div class="container-fluid tm-container-small">
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-12 px-5 mb-3">
+                    By<br>
+                    Chahat Chawla (cc4621); Anish Saha (as6161).
+                </div>
+                <div class="col-lg-4 col-md-5 col-12 px-5 text-right">
+                    Designed by <a href="https://templatemo.com" class="tm-text-gray" rel="sponsored" target="_parent">TemplateMo</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-md-7 col-12 px-5 mb-3">
+                    
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="js/plugins.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/jsuites.js"></script>
+    <script src="js/jsuites.webcomponents.js"></script>
+    <script>
+        $(window).on("load", function() {
+            $('body').addClass('loaded');
+        });
+    </script>
+</body>
+</html>
