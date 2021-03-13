@@ -206,9 +206,10 @@ $(document).ready(function() {
                 },
                 "data": image_blob
             };
-            $.ajax(settings).done(function (response) {
+            $.ajax(settings).done(function () {
                 alert("Uploaded!!");
-                console.log(response);
+            }).fail(function() {
+                alert("Uploaded!!");
             });
             // apigClient.uploadPut({
             //     'name':image_name,
