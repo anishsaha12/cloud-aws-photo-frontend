@@ -63,6 +63,12 @@ https://templatemo.com/tm-556-catalog-z
                         <jsuites-tags name="custom-labels" value="" id="custom-labels"></jsuites-tags>
                     </div>
 
+                    <div class="form-group">
+                        <label for="contains-person" class="form-label">Contains Person</label>
+                        <input type="checkbox" name="contains-person" value="" id="contains-person"/>
+                        <input style="display: none;" type="text" class="form-control" name="person-name" value="" placeholder="Enter Name" id="person-name"/>
+                    </div>
+
                     <div class="form-group tm-text-right">
                         <button type="submit" class="btn btn-primary">Send</button>
                     </div>
@@ -105,6 +111,17 @@ https://templatemo.com/tm-556-catalog-z
     <script src="js/controller.js"></script>
     <script src="js/jsuites.js"></script>
     <script src="js/jsuites.webcomponents.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="js/sdk/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="js/sdk/apigClient.js"></script>
     <script>
         $(window).on("load", function() {
             $('body').addClass('loaded');

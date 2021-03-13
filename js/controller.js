@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
+    var apigClient = apigClientFactory.newClient();
+
     function get_query(q) {
-        var searh_resp = [
+        var search_resp = [
             {
                 'url': 'img/img-01.jpg',
                 'labels': ['Hangers']
@@ -67,7 +69,37 @@ $(document).ready(function() {
                 'labels': ['Peace']
             }
         ];
-        return searh_resp;
+        
+        return apigClient.searchGet({
+            'q':q
+        }).then(function(result){
+            search_resp = result.data.results;
+            return search_resp;
+        }).catch( function(result){
+            return [];
+        });
+    }
+
+    function makeblob(dataURL) {
+        var BASE64_MARKER = ';base64,';
+        if (dataURL.indexOf(BASE64_MARKER) == -1) {
+            var parts = dataURL.split(',');
+            var contentType = parts[0].split(':')[1];
+            var raw = decodeURIComponent(parts[1]);
+            return new Blob([raw], { type: contentType });
+        }
+        var parts = dataURL.split(BASE64_MARKER);
+        var contentType = parts[0].split(':')[1];
+        var raw = window.atob(parts[1]);
+        var rawLength = raw.length;
+
+        var uInt8Array = new Uint8Array(rawLength);
+
+        for (var i = 0; i < rawLength; ++i) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+
+        return new Blob([uInt8Array], { type: contentType });
     }
     
     $('#search-form').submit(function(e) {
@@ -86,39 +118,63 @@ $(document).ready(function() {
         var input = $("#search-form :input[type='search']")[0];
         var query_term = input.value;
         console.log(query_term);
+
+        if(query_term == ''){
+            alert('Enter a query');
+            $('#search-result-display')[0].innerHTML = `
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                    <figure class="effect-ming tm-video-item">
+                        <img src="img/search.gif" alt="Image" class="img-fluid">
+                        <figcaption class="d-flex align-items-center justify-content-center">
+                            <h2>Find an Image</h2>
+                        </figcaption>
+                    </figure>
+                </div>`;
+            return;
+        }
         
         // perform GET with query
-        var search_resp = get_query(query_term);
-
-        var html_result = search_resp.map(function(res){
-            return `
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="${res.url}" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>${res.labels[0]}</h2>
-                        <a href="${res.url}" target="_blank">View more</a>
-                    </figcaption>
-                </figure>
-                <div class="d-flex justify-content-between tm-text-gray">
-                    <span class="tm-text-gray-light">${res.labels.join(', ')}</span>
-                </div>
-            </div>`
+        get_query(query_term).then(function(search_resp){
+            var html_result = search_resp.map(function(res){
+                return `
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                    <figure class="effect-ming tm-video-item">
+                        <img src="${res.url}" alt="Image" class="img-fluid">
+                        <figcaption class="d-flex align-items-center justify-content-center">
+                            <h2>${res.labels[0]}</h2>
+                            <a href="${res.url}" target="_blank">View more</a>
+                        </figcaption>
+                    </figure>
+                    <div class="d-flex justify-content-between tm-text-gray">
+                        <span class="tm-text-gray-light">${res.labels.join(', ')}</span>
+                    </div>
+                </div>`
+            });
+    
+            if(html_result.length == 0){
+                $('#search-result-display')[0].innerHTML = `
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                    <figure class="effect-ming tm-video-item">
+                        <img src="img/search.gif" alt="Image" class="img-fluid">
+                        <figcaption class="d-flex align-items-center justify-content-center">
+                            <h2>Find an Image</h2>
+                        </figcaption>
+                    </figure>
+                </div>`;
+            }
+            else{
+                $('#search-result-display')[0].innerHTML = html_result.join('\n');
+            }
         });
+    });
 
-        if(html_result.length == 0){
-            $('#search-result-display')[0].innerHTML = `
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                <figure class="effect-ming tm-video-item">
-                    <img src="img/search.gif" alt="Image" class="img-fluid">
-                    <figcaption class="d-flex align-items-center justify-content-center">
-                        <h2>Find an Image</h2>
-                    </figcaption>
-                </figure>
-            </div>`;
-        }
-        else{
-            $('#search-result-display')[0].innerHTML = html_result.join('\n');
+    $("#contains-person").change(function() {
+        if(this.checked) {
+            $('#person-name').show();
+            $('#person-name').val("");
+        }else{
+            $('#person-name').hide();
+            $('#person-name').val("");
         }
     });
 
@@ -128,30 +184,44 @@ $(document).ready(function() {
         var input_file = $("#upload-form :input[type='file']")[0];
         var custom_labels = $("#custom-labels")[0].value;
 
+        if($("#contains-person").is(":checked")){
+            custom_labels += ', name_'+ $('#person-name').val();
+        }
+
         var image = input_file.files[0];
-        var image_name = input_file.files[0].name;
+        var image_name = image.name;
+        var type = image.type;
         var reader = new FileReader();
         reader.onload = function(){
             var image_data = reader.result;
-            var parts = image_data.split(',');
-            var image = parts[1];
-            var type = parts[0].split(':')[1].split(';')[0]
-
+            var image_blob = makeblob(image_data);
             var settings = {
                 "url": "https://pxfh8bitck.execute-api.us-east-1.amazonaws.com/v1/upload?name="+image_name,
                 "method": "PUT",
+                contentType: 'application/octet-stream',
+                processData: false,
                 "headers": {
                     "x-amz-meta-customLabels": custom_labels ,
                     "Content-Type": type
                 },
-                "data": image
+                "data": image_blob
             };
-    
-            console.log(settings);
-
             $.ajax(settings).done(function (response) {
+                alert("Uploaded!!");
                 console.log(response);
             });
+            // apigClient.uploadPut({
+            //     'name':image_name,
+            //     'x-amz-meta-customLabels': custom_labels,
+            //     'Content-Type': type,
+            //     'Accept': '*'
+            // },image_blob).then(function(result){
+            //     console.log('UPLOADED');
+            //     console.log(result);
+            // }).catch( function(result){
+            //     console.log('Failed');
+            //     console.log(result);
+            // });
         };
         reader.readAsDataURL(image);
 
