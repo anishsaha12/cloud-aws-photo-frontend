@@ -194,35 +194,35 @@ $(document).ready(function() {
         var reader = new FileReader();
         reader.onload = function(){
             var image_data = reader.result;
-            var image_blob = makeblob(image_data);
-            var settings = {
-                "url": "https://gdxo2v6lg0.execute-api.us-east-1.amazonaws.com/v1/upload?name="+image_name,
-                "method": "PUT",
-                contentType: 'application/octet-stream',
-                processData: false,
-                "headers": {
-                    "x-amz-meta-customLabels": custom_labels ,
-                    "Content-Type": type
-                },
-                "data": image_blob
-            };
-            $.ajax(settings).done(function () {
-                alert("Uploaded!!");
-            }).fail(function() {
-                alert("Uploaded!!");
-            });
-            // apigClient.uploadPut({
-            //     'name':image_name,
-            //     'x-amz-meta-customLabels': custom_labels,
-            //     'Content-Type': type,
-            //     'Accept': '*'
-            // },image_blob).then(function(result){
-            //     console.log('UPLOADED');
-            //     console.log(result);
-            // }).catch( function(result){
-            //     console.log('Failed');
-            //     console.log(result);
+            // var image_blob = makeblob(image_data);
+            // var settings = {
+            //     "url": "https://gdxo2v6lg0.execute-api.us-east-1.amazonaws.com/v1/upload?name="+image_name,
+            //     "method": "PUT",
+            //     contentType: 'application/octet-stream',
+            //     processData: false,
+            //     "headers": {
+            //         "x-amz-meta-customLabels": custom_labels ,
+            //         "Content-Type": type
+            //     },
+            //     "data": image_blob
+            // };
+            // $.ajax(settings).done(function () {
+            //     alert("Uploaded!!");
+            // }).fail(function() {
+            //     alert("Uploaded!!");
             // });
+            apigClient.uploadPut({
+                'name':image_name,
+                'x-amz-meta-customLabels': custom_labels,
+                'Content-Type': image_data.split(',')[0],
+                'Accept': '*/*'
+            },image_data.split(',')[1]).then(function(result){
+                alert("Uploaded!!");
+                console.log(result);
+            }).catch( function(result){
+                alert('Failed!!');
+                console.log(result);
+            });
         };
         reader.readAsDataURL(image);
 
