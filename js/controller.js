@@ -196,7 +196,7 @@ $(document).ready(function() {
             var image_data = reader.result;
             var image_blob = makeblob(image_data);
             var settings = {
-                "url": "https://pxfh8bitck.execute-api.us-east-1.amazonaws.com/v1/upload?name="+image_name,
+                "url": "https://gdxo2v6lg0.execute-api.us-east-1.amazonaws.com/v1/upload?name="+image_name,
                 "method": "PUT",
                 contentType: 'application/octet-stream',
                 processData: false,
