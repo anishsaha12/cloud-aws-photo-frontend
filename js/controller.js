@@ -119,6 +119,7 @@ $(document).ready(function() {
 
         var input = $("#search-form :input[type='search']")[0];
         var query_term = input.value;
+        query_term = query_term.replace('.','');
         console.log(query_term);
 
         if(query_term == ''){
