@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
-    var apigClient = apigClientFactory.newClient();
+    var apigClient = apigClientFactory.newClient({
+        apiKey: 'VGR3rliSfuM7gFttuLmv1wrBdeHKS5W4alFLSua3'
+    });
 
     function get_query(q) {
         var search_resp = [
